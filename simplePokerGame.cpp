@@ -1,14 +1,27 @@
+// Librares
 #include <iostream>
 #include <string>
 #include <cstdlib>
 #include <ctime>
 
+// declared namespace
 using namespace std;
 
+// Constants and Global variables
+// Suits 
 const string SUITS[] = {"Hearts", "Diamonds", "Clubs", "Spades"};
 const string RANKS[] = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"};
 int DECK[52];
 int currentCardIndex = 0;
+// game state bool
+bool play = true;
+// wins
+int wins = 0;
+// ties
+int ties = 0;
+// loses
+int loses = 0;
+char response = ' ';
 
 void initializeDeck() {
     for (int i = 0; i < 52; i++) {
@@ -88,19 +101,24 @@ void determineWinner(int playerTotal, int dealerTotal) {
 }
 
 int main() {
-    initializeDeck();
-    shuffleDeck();
-  
-    int playerTotal = dealInitialPlayerCards();
-    int dealerTotal = dealInitialDealerCards();
-  
-    playerTotal = playerTurn(playerTotal);
-    if (playerTotal > 21) {
-      cout << "You busted! Dealer wins." << endl;
-      return 0;
+
+    while (play){
+        initializeDeck();
+        shuffleDeck();
+        int playerTotal = dealInitialPlayerCards();
+        int dealerTotal = dealInitialDealerCards();
+        playerTotal = playerTurn(playerTotal);
+        if (playerTotal > 21) {
+        cout << "You busted! Dealer wins." << endl;
+        }
+        dealerTotal = dealerTurn(dealerTotal);
+        determineWinner(playerTotal, dealerTotal);
+        cout << "Play again?";
+        cin >> response;
+        toupper(response);
+        if (response == 'N'){
+            play = false;
+        } 
     }
-    dealerTotal = dealerTurn(dealerTotal);
-    determineWinner(playerTotal, dealerTotal);
-  
     return 0;
 }
